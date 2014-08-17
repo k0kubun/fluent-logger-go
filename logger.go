@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Logger owns asynchronous logging to fluentd.
 type Logger struct {
 	config Config
 	postCh chan message

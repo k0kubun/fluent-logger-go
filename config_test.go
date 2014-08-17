@@ -17,13 +17,13 @@ func TestApplyDefaultValues(t *testing.T) {
 	assertEqual(t, config.BufferingTimeout, durationDefault)
 
 	config.applyDefaultValues()
-	assertEqual(t, config.FluentHost, defaultFluentHost)
-	assertEqual(t, config.FluentPort, defaultFluentPort)
-	assertEqual(t, config.ChannelLength, defaultChannelLength)
-	assertEqual(t, config.BufferLength, defaultBufferLength)
-	assertEqual(t, config.MaxTrialForConnection, defaultMaxTrialForConnection)
-	assertEqual(t, config.ConnectionTimeout, defaultConnectionTimeout)
-	assertEqual(t, config.BufferingTimeout, defaultBufferingTimeout)
+	assertEqual(t, config.FluentHost, DefaultFluentHost)
+	assertEqual(t, config.FluentPort, DefaultFluentPort)
+	assertEqual(t, config.ChannelLength, DefaultChannelLength)
+	assertEqual(t, config.BufferLength, DefaultBufferLength)
+	assertEqual(t, config.MaxTrialForConnection, DefaultMaxTrialForConnection)
+	assertEqual(t, config.ConnectionTimeout, DefaultConnectionTimeout)
+	assertEqual(t, config.BufferingTimeout, DefaultBufferingTimeout)
 
 	config = Config{
 		FluentHost:            "localhost",

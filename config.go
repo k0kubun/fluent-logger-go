@@ -3,13 +3,13 @@ package fluent
 import "time"
 
 const (
-	defaultFluentHost            = "127.0.0.1"
-	defaultFluentPort            = 24224
-	defaultChannelLength         = 1000
-	defaultBufferLength          = 10 * 1024
-	defaultMaxTrialForConnection = 10
-	defaultConnectionTimeout     = 3 * time.Second
-	defaultBufferingTimeout      = 100 * time.Millisecond
+	DefaultFluentHost            = "127.0.0.1"
+	DefaultFluentPort            = 24224
+	DefaultChannelLength         = 1000
+	DefaultBufferLength          = 10 * 1024
+	DefaultMaxTrialForConnection = 10
+	DefaultConnectionTimeout     = 3 * time.Second
+	DefaultBufferingTimeout      = 100 * time.Millisecond
 )
 
 var (
@@ -18,6 +18,7 @@ var (
 	durationDefault time.Duration
 )
 
+// Config is just for fluent.NewLogger() argument.
 type Config struct {
 	FluentHost            string
 	FluentPort            int
@@ -29,31 +30,31 @@ type Config struct {
 }
 
 func (c *Config) applyDefaultValues() {
-	assignIfDefault(&c.FluentHost, defaultFluentHost)
-	assignIfDefault(&c.FluentPort, defaultFluentPort)
-	assignIfDefault(&c.ChannelLength, defaultChannelLength)
-	assignIfDefault(&c.BufferLength, defaultBufferLength)
-	assignIfDefault(&c.MaxTrialForConnection, defaultMaxTrialForConnection)
-	assignIfDefault(&c.ConnectionTimeout, defaultConnectionTimeout)
-	assignIfDefault(&c.BufferingTimeout, defaultBufferingTimeout)
+	assignIfDefault(&c.FluentHost, DefaultFluentHost)
+	assignIfDefault(&c.FluentPort, DefaultFluentPort)
+	assignIfDefault(&c.ChannelLength, DefaultChannelLength)
+	assignIfDefault(&c.BufferLength, DefaultBufferLength)
+	assignIfDefault(&c.MaxTrialForConnection, DefaultMaxTrialForConnection)
+	assignIfDefault(&c.ConnectionTimeout, DefaultConnectionTimeout)
+	assignIfDefault(&c.BufferingTimeout, DefaultBufferingTimeout)
 }
 
-func assignIfDefault(target interface{}, defaultValue interface{}) {
+func assignIfDefault(target interface{}, DefaultValue interface{}) {
 	switch target.(type) {
 	case *string:
 		ptr := target.(*string)
 		if *ptr == stringDefault {
-			*ptr = defaultValue.(string)
+			*ptr = DefaultValue.(string)
 		}
 	case *int:
 		ptr := target.(*int)
 		if *ptr == intDefault {
-			*ptr = defaultValue.(int)
+			*ptr = DefaultValue.(int)
 		}
 	case *time.Duration:
 		ptr := target.(*time.Duration)
 		if *ptr == durationDefault {
-			*ptr = defaultValue.(time.Duration)
+			*ptr = DefaultValue.(time.Duration)
 		}
 	}
 }
