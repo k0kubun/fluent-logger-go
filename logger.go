@@ -34,7 +34,7 @@ func NewLogger(config Config) *Logger {
 
 // You can send message to logger's goroutine via channel.
 func (l *Logger) Post(tag string, data interface{}) {
-	l.postCh <- message{tag: tag, data: data}
+	l.postCh <- message{tag: tag, time: time.Now(), data: data}
 }
 
 func (l *Logger) loop() {
