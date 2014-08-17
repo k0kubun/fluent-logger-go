@@ -24,6 +24,7 @@ func NewLogger(config Config) *Logger {
 		ticker: time.NewTicker(config.BufferingTimeout),
 	}
 	go logger.loop()
+	defer logger.sendMessage()
 
 	return logger
 }
@@ -64,6 +65,7 @@ func (l *Logger) sendMessage() {
 		l.buffer = l.buffer[0:0]
 	} else {
 		log.Printf("failed to send message: " + err.Error())
+		l.conn.Close()
 		l.conn = nil
 	}
 }
