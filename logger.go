@@ -63,6 +63,10 @@ func (l *Logger) sendMessage() {
 	}
 
 	l.connect()
+	if l.conn == nil {
+		return
+	}
+
 	_, err := l.conn.Write(l.buffer)
 
 	if err == nil {
