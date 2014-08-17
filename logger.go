@@ -16,6 +16,8 @@ type Logger struct {
 	ticker *time.Ticker
 }
 
+// NewLogger() launches a goroutine to log and returns logger.
+// Logger has a channel to interact with the goroutine.
 func NewLogger(config Config) *Logger {
 	config.applyDefaultValues()
 
@@ -30,6 +32,7 @@ func NewLogger(config Config) *Logger {
 	return logger
 }
 
+// You can send message to logger's goroutine via channel.
 func (l *Logger) Post(tag string, data interface{}) {
 	l.postCh <- message{tag: tag, data: data}
 }

@@ -20,13 +20,24 @@ var (
 
 // Config is just for fluent.NewLogger() argument.
 type Config struct {
-	FluentHost            string
-	FluentPort            int
-	ChannelLength         int
-	BufferLength          int
+	// You can customize fluentd host and port.
+	FluentHost string
+	FluentPort int
+
+	// If buffered channel's length is equal to ChannelLength, main thread blocks.
+	ChannelLength int
+
+	// If all posted messages' size reaches BufferLength, logger flushes all logs.
+	BufferLength int
+
+	// Retry connection with fluentd MaxTrialForConnection times.
 	MaxTrialForConnection int
-	ConnectionTimeout     time.Duration
-	BufferingTimeout      time.Duration
+
+	// Wait for connection until ConnectionTimeout.
+	ConnectionTimeout time.Duration
+
+	// Logger flushes its buffer on each BufferingTimeout interval.
+	BufferingTimeout time.Duration
 }
 
 func (c *Config) applyDefaultValues() {
