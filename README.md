@@ -6,7 +6,6 @@ Goroutine based asynchronous event logger for Fluentd
 
 * Channel based non-blocking logging interface
 * Queued events are periodically sent to fluentd altogether
-* Single goroutine owns a role of logging, thus no risk for duplicated logging
 
 ## Installation
 
@@ -16,11 +15,27 @@ $ go get github.com/k0kubun/fluent-logger-go
 
 ## Usage
 
-```
-import "github.com/k0kubun/fluent-logger-go"
-```
+```go
+package main
 
-pending
+import "github.com/gin-gonic/gin"
+import "github.com/k0kubun/fluent-logger-go"
+
+var logger *fluent.Logger
+
+func logId(c *gin.Context) {
+	id := c.Params.ByName("id")
+	logger.Post("idlog", map[string]string{"id": id})
+	c.String(200, "Logged id")
+}
+
+func main() {
+	logger = fluent.NewLogger(fluent.Config{})
+	r := gin.Default()
+	r.GET("/:id", logId)
+	r.Run(":3000")
+}
+```
 
 ### Documentation
 
