@@ -8,37 +8,37 @@ import (
 func TestApplyDefaultValues(t *testing.T) {
 	config := Config{}
 
-	assertEqual(t, config.fluentHost, stringDefault)
-	assertEqual(t, config.fluentPort, intDefault)
-	assertEqual(t, config.channelLength, intDefault)
-	assertEqual(t, config.bufferLength, intDefault)
-	assertEqual(t, config.maxTrialForConnection, intDefault)
-	assertEqual(t, config.connectionTimeout, durationDefault)
+	assertEqual(t, config.FluentHost, stringDefault)
+	assertEqual(t, config.FluentPort, intDefault)
+	assertEqual(t, config.ChannelLength, intDefault)
+	assertEqual(t, config.BufferLength, intDefault)
+	assertEqual(t, config.MaxTrialForConnection, intDefault)
+	assertEqual(t, config.ConnectionTimeout, durationDefault)
 
 	config.applyDefaultValues()
-	assertEqual(t, config.fluentHost, defaultFluentHost)
-	assertEqual(t, config.fluentPort, defaultFluentPort)
-	assertEqual(t, config.channelLength, defaultChannelLength)
-	assertEqual(t, config.bufferLength, defaultBufferLength)
-	assertEqual(t, config.maxTrialForConnection, defaultMaxTrialForConnection)
-	assertEqual(t, config.connectionTimeout, defaultConnectionTimeout)
+	assertEqual(t, config.FluentHost, defaultFluentHost)
+	assertEqual(t, config.FluentPort, defaultFluentPort)
+	assertEqual(t, config.ChannelLength, defaultChannelLength)
+	assertEqual(t, config.BufferLength, defaultBufferLength)
+	assertEqual(t, config.MaxTrialForConnection, defaultMaxTrialForConnection)
+	assertEqual(t, config.ConnectionTimeout, defaultConnectionTimeout)
 
 	config = Config{
-		fluentHost:            "localhost",
-		fluentPort:            80,
-		channelLength:         1,
-		bufferLength:          2,
-		maxTrialForConnection: 3,
-		connectionTimeout:     2 * time.Second,
+		FluentHost:            "localhost",
+		FluentPort:            80,
+		ChannelLength:         1,
+		BufferLength:          2,
+		MaxTrialForConnection: 3,
+		ConnectionTimeout:     2 * time.Second,
 	}
 
 	config.applyDefaultValues()
-	assertEqual(t, config.fluentHost, "localhost")
-	assertEqual(t, config.fluentPort, 80)
-	assertEqual(t, config.channelLength, 1)
-	assertEqual(t, config.bufferLength, 2)
-	assertEqual(t, config.maxTrialForConnection, 3)
-	assertEqual(t, config.connectionTimeout, 2*time.Second)
+	assertEqual(t, config.FluentHost, "localhost")
+	assertEqual(t, config.FluentPort, 80)
+	assertEqual(t, config.ChannelLength, 1)
+	assertEqual(t, config.BufferLength, 2)
+	assertEqual(t, config.MaxTrialForConnection, 3)
+	assertEqual(t, config.ConnectionTimeout, 2*time.Second)
 }
 
 func assertEqual(t *testing.T, actual interface{}, expect interface{}) {

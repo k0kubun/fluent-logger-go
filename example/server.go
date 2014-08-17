@@ -16,7 +16,9 @@ func logId(c *gin.Context) {
 }
 
 func main() {
-	logger = fluent.NewLogger(fluent.Config{})
+	logger = fluent.NewLogger(fluent.Config{
+		BufferLength: 3 * 1024,
+	})
 
 	r := gin.Default()
 	r.GET("/:id", logId)

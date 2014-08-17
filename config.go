@@ -6,7 +6,7 @@ const (
 	defaultFluentHost            = "127.0.0.1"
 	defaultFluentPort            = 24224
 	defaultChannelLength         = 1000
-	defaultBufferLength          = 1024 * 1024
+	defaultBufferLength          = 10 * 1024
 	defaultMaxTrialForConnection = 10
 	defaultConnectionTimeout     = time.Second
 )
@@ -18,21 +18,21 @@ var (
 )
 
 type Config struct {
-	fluentHost            string
-	fluentPort            int
-	channelLength         int
-	bufferLength          int
-	maxTrialForConnection int
-	connectionTimeout     time.Duration
+	FluentHost            string
+	FluentPort            int
+	ChannelLength         int
+	BufferLength          int
+	MaxTrialForConnection int
+	ConnectionTimeout     time.Duration
 }
 
 func (c *Config) applyDefaultValues() {
-	assignIfDefault(&c.fluentHost, defaultFluentHost)
-	assignIfDefault(&c.fluentPort, defaultFluentPort)
-	assignIfDefault(&c.channelLength, defaultChannelLength)
-	assignIfDefault(&c.bufferLength, defaultBufferLength)
-	assignIfDefault(&c.maxTrialForConnection, defaultMaxTrialForConnection)
-	assignIfDefault(&c.connectionTimeout, defaultConnectionTimeout)
+	assignIfDefault(&c.FluentHost, defaultFluentHost)
+	assignIfDefault(&c.FluentPort, defaultFluentPort)
+	assignIfDefault(&c.ChannelLength, defaultChannelLength)
+	assignIfDefault(&c.BufferLength, defaultBufferLength)
+	assignIfDefault(&c.MaxTrialForConnection, defaultMaxTrialForConnection)
+	assignIfDefault(&c.ConnectionTimeout, defaultConnectionTimeout)
 }
 
 func assignIfDefault(target interface{}, defaultValue interface{}) {

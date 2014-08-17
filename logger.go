@@ -1,6 +1,7 @@
 package fluent
 
 import (
+	"log"
 	"net"
 	"strconv"
 )
@@ -17,7 +18,7 @@ func NewLogger(config Config) *Logger {
 
 	logger := &Logger{
 		config: config,
-		postCh: make(chan Message, config.channelLength),
+		postCh: make(chan Message, config.ChannelLength),
 	}
 	go logger.loop()
 
@@ -34,12 +35,12 @@ func (l *Logger) loop() {
 		case message := <-l.postCh:
 			pack, err := message.toMsgpack()
 			if err != nil {
-				println("error")
+				log.Printf("message pack dump error: " + err.Error())
 				continue
 			}
 
 			l.buffer = append(l.buffer, pack...)
-			if len(l.buffer) > l.config.bufferLength {
+			if len(l.buffer) > l.config.BufferLength {
 				l.sendMessage()
 			}
 		}
@@ -47,17 +48,35 @@ func (l *Logger) loop() {
 }
 
 func (l *Logger) sendMessage() {
+	l.connect()
+
+	_, err := l.conn.Write(l.buffer)
+	if err == nil {
+		l.buffer = l.buffer[0:0]
+		print("*")
+	} else {
+		log.Printf("failed to send message: " + err.Error())
+		l.conn = nil
+		print("x")
+	}
 }
 
 func (l *Logger) connect() {
-	for i := 0; i < l.config.maxTrialForConnection; i++ {
-		conn, err := net.DialTimeout(
+	if l.conn != nil {
+		return
+	}
+
+	var err error
+	for i := 0; i < l.config.MaxTrialForConnection; i++ {
+		l.conn, err = net.DialTimeout(
 			"tcp",
-			l.config.fluentHost+":"+strconv.Itoa(l.config.fluentPort),
-			l.config.connectionTimeout,
+			l.config.FluentHost+":"+strconv.Itoa(l.config.FluentPort),
+			l.config.ConnectionTimeout,
 		)
+
 		if err == nil {
-			l.conn = conn
+			return
 		}
 	}
+	log.Printf("failed to establish connection with fluentd: " + err.Error())
 }
