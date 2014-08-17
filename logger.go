@@ -9,7 +9,7 @@ import (
 
 type Logger struct {
 	config Config
-	postCh chan Message
+	postCh chan message
 	buffer []byte
 	conn   net.Conn
 	ticker *time.Ticker
@@ -20,7 +20,7 @@ func NewLogger(config Config) *Logger {
 
 	logger := &Logger{
 		config: config,
-		postCh: make(chan Message, config.ChannelLength),
+		postCh: make(chan message, config.ChannelLength),
 		ticker: time.NewTicker(config.BufferingTimeout),
 	}
 	go logger.loop()
@@ -30,14 +30,14 @@ func NewLogger(config Config) *Logger {
 }
 
 func (l *Logger) Post(tag string, data interface{}) {
-	l.postCh <- Message{tag: tag, data: data}
+	l.postCh <- message{tag: tag, data: data}
 }
 
 func (l *Logger) loop() {
 	for {
 		select {
-		case message := <-l.postCh:
-			pack, err := message.toMsgpack()
+		case msg := <-l.postCh:
+			pack, err := msg.toMsgpack()
 			if err != nil {
 				log.Printf("message pack dump error: " + err.Error())
 				continue

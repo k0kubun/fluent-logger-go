@@ -10,12 +10,12 @@ var (
 	mh codec.MsgpackHandle
 )
 
-type Message struct {
+type message struct {
 	tag  string
 	data interface{}
 }
 
-func (m *Message) toMsgpack() ([]byte, error) {
+func (m *message) toMsgpack() ([]byte, error) {
 	pack := []byte{}
 	encoder := codec.NewEncoderBytes(&pack, &mh)
 
