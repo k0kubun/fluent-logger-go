@@ -9,6 +9,7 @@ const (
 	defaultBufferLength          = 10 * 1024
 	defaultMaxTrialForConnection = 10
 	defaultConnectionTimeout     = time.Second
+	defaultBufferingTimeout      = time.Second
 )
 
 var (
@@ -24,6 +25,7 @@ type Config struct {
 	BufferLength          int
 	MaxTrialForConnection int
 	ConnectionTimeout     time.Duration
+	BufferingTimeout      time.Duration
 }
 
 func (c *Config) applyDefaultValues() {
@@ -33,6 +35,7 @@ func (c *Config) applyDefaultValues() {
 	assignIfDefault(&c.BufferLength, defaultBufferLength)
 	assignIfDefault(&c.MaxTrialForConnection, defaultMaxTrialForConnection)
 	assignIfDefault(&c.ConnectionTimeout, defaultConnectionTimeout)
+	assignIfDefault(&c.BufferingTimeout, defaultBufferingTimeout)
 }
 
 func assignIfDefault(target interface{}, defaultValue interface{}) {

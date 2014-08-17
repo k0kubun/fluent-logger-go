@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"strconv"
+	"time"
 )
 
 type Logger struct {
@@ -11,6 +12,7 @@ type Logger struct {
 	postCh chan Message
 	buffer []byte
 	conn   net.Conn
+	ticker *time.Ticker
 }
 
 func NewLogger(config Config) *Logger {
@@ -19,6 +21,7 @@ func NewLogger(config Config) *Logger {
 	logger := &Logger{
 		config: config,
 		postCh: make(chan Message, config.ChannelLength),
+		ticker: time.NewTicker(config.BufferingTimeout),
 	}
 	go logger.loop()
 
@@ -43,21 +46,25 @@ func (l *Logger) loop() {
 			if len(l.buffer) > l.config.BufferLength {
 				l.sendMessage()
 			}
+		case <-l.ticker.C:
+			l.sendMessage()
 		}
 	}
 }
 
 func (l *Logger) sendMessage() {
-	l.connect()
+	if len(l.buffer) == 0 {
+		return
+	}
 
+	l.connect()
 	_, err := l.conn.Write(l.buffer)
+
 	if err == nil {
 		l.buffer = l.buffer[0:0]
-		print("*")
 	} else {
 		log.Printf("failed to send message: " + err.Error())
 		l.conn = nil
-		print("x")
 	}
 }
 
