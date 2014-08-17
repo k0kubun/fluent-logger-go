@@ -8,8 +8,8 @@ const (
 	defaultChannelLength         = 1000
 	defaultBufferLength          = 10 * 1024
 	defaultMaxTrialForConnection = 10
-	defaultConnectionTimeout     = time.Second
-	defaultBufferingTimeout      = time.Second
+	defaultConnectionTimeout     = 3 * time.Second
+	defaultBufferingTimeout      = 100 * time.Millisecond
 )
 
 var (
