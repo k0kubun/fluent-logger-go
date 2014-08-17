@@ -1,0 +1,2 @@
+fluent: fluentd -c config/fluentd.conf
+gin: go run server.go
