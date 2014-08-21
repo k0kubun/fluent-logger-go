@@ -9,11 +9,12 @@ import (
 
 // Logger owns asynchronous logging to fluentd.
 type Logger struct {
-	config Config
-	postCh chan message
-	buffer []byte
-	conn   net.Conn
-	ticker *time.Ticker
+	config   Config
+	postCh   chan message
+	buffer   []byte
+	conn     net.Conn
+	ticker   *time.Ticker
+	logError bool
 }
 
 // NewLogger() launches a goroutine to log and returns logger.
@@ -22,9 +23,10 @@ func NewLogger(config Config) *Logger {
 	config.applyDefaultValues()
 
 	logger := &Logger{
-		config: config,
-		postCh: make(chan message, config.ChannelLength),
-		ticker: time.NewTicker(config.BufferingTimeout),
+		config:   config,
+		postCh:   make(chan message, config.ChannelLength),
+		ticker:   time.NewTicker(config.BufferingTimeout),
+		logError: true,
 	}
 	go logger.loop()
 	defer logger.sendMessage()
@@ -92,8 +94,13 @@ func (l *Logger) connect() {
 		)
 
 		if err == nil {
+			l.logError = true
 			return
 		}
 	}
-	log.Printf("failed to establish connection with fluentd: " + err.Error())
+
+	if l.logError {
+		log.Printf("failed to establish connection with fluentd: " + err.Error())
+		l.logError = false
+	}
 }
