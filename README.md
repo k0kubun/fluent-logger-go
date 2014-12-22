@@ -1,4 +1,4 @@
-# fluent-logger-go
+# fluent-logger-go [![wercker status](https://app.wercker.com/status/a1315bbe4e3ac95f8fb35da32d60d5e6/s "wercker status")](https://app.wercker.com/project/bykey/a1315bbe4e3ac95f8fb35da32d60d5e6)
 
 Goroutine based asynchronous event logger for Fluentd
 
