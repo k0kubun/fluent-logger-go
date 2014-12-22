@@ -10,6 +10,7 @@ const (
 	DefaultMaxTrialForConnection = 10
 	DefaultConnectionTimeout     = 3 * time.Second
 	DefaultBufferingTimeout      = 100 * time.Millisecond
+	DefaultTagPrefix             = ""
 )
 
 var (
@@ -38,6 +39,10 @@ type Config struct {
 
 	// Logger flushes its buffer on each BufferingTimeout interval.
 	BufferingTimeout time.Duration
+
+	// Tag prefix. When set TagPrefix to "foo" and post with "bar.baz",
+	// you'll get "foo.bar.baz" tag.
+	TagPrefix string
 }
 
 func (c *Config) applyDefaultValues() {
@@ -48,6 +53,7 @@ func (c *Config) applyDefaultValues() {
 	assignIfDefault(&c.MaxTrialForConnection, DefaultMaxTrialForConnection)
 	assignIfDefault(&c.ConnectionTimeout, DefaultConnectionTimeout)
 	assignIfDefault(&c.BufferingTimeout, DefaultBufferingTimeout)
+	assignIfDefault(&c.TagPrefix, DefaultTagPrefix)
 }
 
 func assignIfDefault(target interface{}, DefaultValue interface{}) {

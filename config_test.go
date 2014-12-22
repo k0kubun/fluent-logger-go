@@ -15,6 +15,7 @@ func TestApplyDefaultValues(t *testing.T) {
 	assertEqual(t, config.MaxTrialForConnection, intDefault)
 	assertEqual(t, config.ConnectionTimeout, durationDefault)
 	assertEqual(t, config.BufferingTimeout, durationDefault)
+	assertEqual(t, config.TagPrefix, stringDefault)
 
 	config.applyDefaultValues()
 	assertEqual(t, config.FluentHost, DefaultFluentHost)
@@ -24,6 +25,7 @@ func TestApplyDefaultValues(t *testing.T) {
 	assertEqual(t, config.MaxTrialForConnection, DefaultMaxTrialForConnection)
 	assertEqual(t, config.ConnectionTimeout, DefaultConnectionTimeout)
 	assertEqual(t, config.BufferingTimeout, DefaultBufferingTimeout)
+	assertEqual(t, config.TagPrefix, DefaultTagPrefix)
 
 	config = Config{
 		FluentHost:            "localhost",
@@ -33,6 +35,7 @@ func TestApplyDefaultValues(t *testing.T) {
 		MaxTrialForConnection: 3,
 		ConnectionTimeout:     2 * time.Second,
 		BufferingTimeout:      2 * time.Second,
+		TagPrefix:             "prefix",
 	}
 
 	config.applyDefaultValues()
@@ -43,6 +46,7 @@ func TestApplyDefaultValues(t *testing.T) {
 	assertEqual(t, config.MaxTrialForConnection, 3)
 	assertEqual(t, config.ConnectionTimeout, 2*time.Second)
 	assertEqual(t, config.BufferingTimeout, 2*time.Second)
+	assertEqual(t, config.TagPrefix, "prefix")
 }
 
 func assertEqual(t *testing.T, actual interface{}, expect interface{}) {
