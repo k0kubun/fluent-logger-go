@@ -1,6 +1,7 @@
 package fluent
 
 import (
+	"errors"
 	"log"
 	"net"
 	"strconv"
@@ -35,11 +36,23 @@ func NewLogger(config Config) *Logger {
 }
 
 // You can send message to logger's goroutine via channel.
+// This logging is executed asynchronously.
 func (l *Logger) Post(tag string, data interface{}) {
-	if l.config.TagPrefix != "" {
-		tag = l.config.TagPrefix + "." + tag
-	}
+	tag = l.prependTagPrefix(tag)
 	l.postCh <- message{tag: tag, time: time.Now(), data: data}
+}
+
+// You can send message immediately to fluentd.
+func (l *Logger) Log(tag string, data interface{}) error {
+	tag = l.prependTagPrefix(tag)
+	msg := &message{tag: tag, time: time.Now(), data: data}
+	pack, err := msg.toMsgpack()
+	if err != nil {
+		return err
+	}
+
+	l.buffer = append(l.buffer, pack...)
+	return l.sendMessage()
 }
 
 func (l *Logger) loop() {
@@ -62,14 +75,14 @@ func (l *Logger) loop() {
 	}
 }
 
-func (l *Logger) sendMessage() {
+func (l *Logger) sendMessage() error {
 	if len(l.buffer) == 0 {
-		return
+		return errors.New("Buffer is empty")
 	}
 
 	l.connect()
 	if l.conn == nil {
-		return
+		return errors.New("Failed to establish connection with fluentd")
 	}
 
 	_, err := l.conn.Write(l.buffer)
@@ -81,6 +94,7 @@ func (l *Logger) sendMessage() {
 		l.conn.Close()
 		l.conn = nil
 	}
+	return err
 }
 
 func (l *Logger) connect() {
@@ -106,4 +120,11 @@ func (l *Logger) connect() {
 		log.Printf("failed to establish connection with fluentd: " + err.Error())
 		l.logError = false
 	}
+}
+
+func (l *Logger) prependTagPrefix(tag string) string {
+	if l.config.TagPrefix != "" {
+		tag = l.config.TagPrefix + "." + tag
+	}
+	return tag
 }
