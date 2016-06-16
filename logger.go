@@ -30,8 +30,8 @@ func NewLogger(config Config) *Logger {
 		ticker:   time.NewTicker(config.BufferingTimeout),
 		logError: true,
 	}
+	logger.connect()
 	go logger.loop()
-	defer logger.sendMessage()
 
 	return logger
 }
