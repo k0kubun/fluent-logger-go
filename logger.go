@@ -26,7 +26,6 @@ func NewLogger(config Config) *Logger {
 	logger := &Logger{
 		config:   config,
 		postCh:   make(chan message, config.ChannelLength),
-		buffer:   make([]byte, config.BufferLength),
 		ticker:   time.NewTicker(config.BufferingTimeout),
 		logError: true,
 	}
