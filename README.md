@@ -2,6 +2,10 @@
 
 Goroutine based asynchronous event logger for Fluentd
 
+## Project status
+
+Not maintained. Please use [fluent/fluent-logger-golang](https://github.com/fluent/fluent-logger-golang) instead.
+
 ## Features
 
 * Channel based non-blocking logging interface
